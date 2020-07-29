@@ -15,9 +15,13 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\scheduler\Task;
 use pocketmine\scheduler\SchedulerTask;
-use jojoe77777\FormAPI;
+use pocketmine\event\Listener;
+use pocketmine\inventory\Inventory;
+use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
+use DavidFlash\FlashItem\libs\jojoe77777\FormAPI\SimpleForm;
 
-class Main extends PluginBase {
+class Main extends PluginBase implements Listener {
 
 	public function onEnable() {
 		$this->getLogger()->info("Plugin Loaded!");
@@ -55,7 +59,7 @@ class Main extends PluginBase {
 		$this->getServer()->loadLevel($this->getConfig()->get("world"));
 		}
 	}
-
+	
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
 		if($command->getName() == "infoui") {
 			if(!$sender instanceof Player){
@@ -66,7 +70,7 @@ class Main extends PluginBase {
 				$sender->sendMessage("§cThis feature is disabled");
 				return true;
 			}
-			$form = $this->getServer()->getPluginManager()->getPlugin("FormAPI")->createSimpleForm(function (Player $sender, array $data) {
+			$form = new SimpleForm(function (Player $sender,  $data) {
 				switch($data) {
 					case 0:
 						break;
@@ -95,15 +99,25 @@ class Main extends PluginBase {
 				public function __construct(Main $main, CommandSender $player){ //constructor
 					$this->main = $main;
 					$this->player = $player;
+					
 				}
-
+			
 				public function onRun(int $currentTick){ //when is running after 2 secs.
+					
+						$navigate = ItemFactory::get($this->main->getConfig()->get("item"), 0, 1);
+						$navigate->setCustomName($this->main->getConfig()->get("name"));
+					
 					$this->player->sendMessage($this->main->getConfig()->get("message")); //u got msg?
 					$this->player->teleport($this->main->getServer()->getLevelByName($this->main->getConfig()->get("world"))->getSafeSpawn());
 					$this->player->setGamemode($this->main->getConfig()->get("gamemode"));
 					$this->player->setImmobile(false);
 					$this->player->addTitle("§f");
 					$this->player->addSubTitle("§f");
+
+					if($this->main->getConfig()->get("enabled-item") === true){
+						$this->player->getInventory()->addItem($navigate);
+					}
+	
 				}
 
 			},
@@ -111,7 +125,7 @@ class Main extends PluginBase {
 			);
 
 		return true;
-	}elseif($command->getName() == "lobby") {
+	}if($command->getName() == "lobby") {
 		if(!$sender instanceof Player){
 			$sender->sendMessage("§cThis works only in-game");
 			return true;
@@ -131,10 +145,19 @@ class Main extends PluginBase {
 				}
 
 				public function onRun(int $currentTick){ //when is running after 2 secs.
+					
+						$navigate = ItemFactory::get($this->main->getConfig()->get("item"), 0, 1);
+						$navigate->setCustomName($this->main->getConfig()->get("name"));
+					
+					$this->player->getInventory()->removeItem($navigate);
 					$this->player->sendMessage($this->main->getConfig()->get("message")); //u got msg?
 					$this->player->teleport($this->main->getServer()->getLevelByName($this->main->getConfig()->get("world"))->getSafeSpawn());
 					$this->player->setGamemode($this->main->getConfig()->get("gamemode"));
 					$this->player->setImmobile(false);
+					
+					if($this->main->getConfig()->get("enabled-item") === true){
+						$this->player->getInventory()->addItem($navigate);
+					}
 				}
 
 			},
@@ -142,7 +165,7 @@ class Main extends PluginBase {
 			);
 
 		return true;
-	}elseif($command->getName() == "flashcore") {
+	}if($command->getName() == "flashcore") {
 			$sender->sendMessage("§l§gFlash§fCore §r§f1.0.5 by David Flash");
 			$sender->sendMessage("§fA Highly Customizable LobbyCore Plugin.");
 			$sender->sendMessage("");
@@ -154,7 +177,7 @@ class Main extends PluginBase {
 
 		return true;
 	
-	}elseif($command->getName() == "freeze"){
+	}if($command->getName() == "freeze"){
 		if(!$sender instanceof Player){
 			$sender->sendMessage("§cThis works only in-game");
 			return true;
@@ -199,7 +222,7 @@ class Main extends PluginBase {
 		return true;
 		}
 	
-	}elseif($command->getName() == "haf"){
+	}if($command->getName() == "haf"){
 		if(!$sender instanceof Player){
 			$sender->sendMessage("§cThis works only in-game");
 			return true;
@@ -228,7 +251,7 @@ class Main extends PluginBase {
 		return true;
 		}
 	
-	}elseif($command->getName() == "vanish"){
+	}if($command->getName() == "vanish"){
 		if(!$sender instanceof Player){
 			$sender->sendMessage("§cThis works only in-game");
 			return true;
@@ -281,7 +304,7 @@ class Main extends PluginBase {
 		return true;
 		}
 
-	}elseif($command->getName() == "fly"){
+	}if($command->getName() == "fly"){
 		if(!$sender instanceof Player){
 			$sender->sendMessage("§cThis works only in-game");
 			return true;

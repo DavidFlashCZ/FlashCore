@@ -1,5 +1,5 @@
 # LobbyCore by David Flash Configuration File
-# Version 1.0.6
+# Version 1.0.7
 
 # Custom Settings
 
@@ -20,12 +20,20 @@ subtitle: "§fTo Hub"
 # What gamemode will be applied when you do /hub (NEEDS TO BE NUMERIC)
 gamemode: 2
 
+# Item on lobby (REQUIRES PLUGIN FlashItem)
+# These needs to be same as in FlashItem [true / false]
+enabled-item: true
 
-# INFOUI (Experimental)
+item: 345 # Default 345
+name: "§l§aNavigator" # Deafult "§l§aNavigator"
+
+
+
+# INFOUI
 
 # Do you want to enable this feature? (true / false)
 
-enabled: false
+enabled: true
 
 # What message should appear in InfoUI (Use \n for line break)
 
