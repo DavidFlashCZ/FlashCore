@@ -33,14 +33,25 @@ Custom Gamemode Change - Default "2"
 
 # Permissions
   fly:
+  
      permission: fc.fly
+     
      description: Allow you to fly or a person to fly
+     
   vanish:
+  
      permission: fc.vanish
+     
      description: Enables Vanish for you or other people
+     
   freeze:
+  
      permission: fc.freeze
+     
      description: Freeze player when he's not kind
+     
   haf:
+  
      permission: fc.haf
+    
      description: Fully restores your hunger and heal
